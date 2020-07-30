@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="fab949c0-7398-4a8f-9d7b-7f864ba4f3aa" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="raviFlow" doc:id="953ce558-6179-4955-be52-86c772dce90b" >
+		<http:listener doc:name="Listener" doc:id="a4e864d7-2f3a-495d-a6f0-7f1879142611" config-ref="HTTP_Listener_config" path="ravi"/>
+		<set-payload value="hello world" doc:name="Set Payload" doc:id="f19f2741-9dcd-48fd-90a9-2b851a5c6da9" />
+		<logger level="INFO" doc:name="Start Logger" doc:id="fd447817-c478-4f9a-b58d-4474a1adcc5e" message="#[payload]"/>
+	</flow>
+</mule>
