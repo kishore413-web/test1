@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="jsondata" format="json">
+      <types:shape format="weave" example="examples/test-1.json"><![CDATA[%dw 2.0
+
+type jsondata = {|
+  Employees: Array<{|    userId: String,     jobTitleName: String,     firstName: String,     lastName: String,     preferredFullName: String,     employeeCode: String,     region: String,     phoneNumber: String,     emailAddress: String  |}>
+|} {"example": "{\\\"Employees\\\":[{\\\"userId\\\":\\\"rirani\\\",\\\"jobTitleName\\\":\\\"Developer\\\",\\\"firstName\\\":\\\"Romin\\\",\\\"lastName\\\":\\\"Irani\\\",\\\"preferredFullName\\\":\\\"Romin Irani\\\",\\\"employeeCode\\\":\\\"E1\\\",\\\"region\\\":\\\"CA\\\",\\\"phoneNumber\\\":\\\"408-1234567\\\",\\\"emailAddress\\\":\\\"romin.k.irani@gmail.com\\\"},{\\\"userId\\\":\\\"nirani\\\",\\\"jobTitleName\\\":\\\"Developer\\\",\\\"firstName\\\":\\\"Neil\\\",\\\"lastName\\\":\\\"Irani\\\",\\\"preferredFullName\\\":\\\"Neil Irani\\\",\\\"employeeCode\\\":\\\"E2\\\",\\\"region\\\":\\\"CA\\\",\\\"phoneNumber\\\":\\\"408-1111111\\\",\\\"emailAddress\\\":\\\"neilrirani@gmail.com\\\"},{\\\"userId\\\":\\\"thanks\\\",\\\"jobTitleName\\\":\\\"Program Directory\\\",\\\"firstName\\\":\\\"Tom\\\",\\\"lastName\\\":\\\"Hanks\\\",\\\"preferredFullName\\\":\\\"Tom Hanks\\\",\\\"employeeCode\\\":\\\"E3\\\",\\\"region\\\":\\\"CA\\\",\\\"phoneNumber\\\":\\\"408-2222222\\\",\\\"emailAddress\\\":\\\"tomhanks@gmail.com\\\"}]}"}
+
+]]></types:shape>
+    </types:type>
+    <types:type name="csvdata" format="csv">
+      <types:shape format="weave" example="examples/csvtest.csv"><![CDATA[%dw 2.0
+
+type csvdata = Array<{|  userid: String,   jobtitle: String,   firstname: String,   lastname: String,   empcode: String,   region: String|}> {"isQuotedString": "false",
+"header": "true",
+"headerLineNumber": "0"}
+
+]]></types:shape>
+      <types:properties>
+        <types:property name="headerLineNumber" value="0"/>
+        <types:property name="header" value="true"/>
+        <types:property name="isQuotedString" value="false"/>
+      </types:properties>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#c8f0c12d-0102-4ee2-9597-c8257a38c1ba">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="jsondata"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="csvdata"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

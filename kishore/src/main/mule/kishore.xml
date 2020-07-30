@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="064ce377-64b2-4551-b673-74931268cf6f" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<file:config name="File_Config" doc:name="File Config" doc:id="82b9ced5-5e1d-4a80-9242-52dd7b1cd449" >
+		<file:connection workingDir="C:\Users\SONY\Desktop\emp" />
+	</file:config>
+	<flow name="kishoreFlow" doc:id="4af6849c-519a-4d4b-ae3c-f134521bd9c4" >
+		<http:listener doc:name="Listener" doc:id="18fea2bf-2d93-418e-a1ae-99bee348fb8f" config-ref="HTTP_Listener_config" path="jsontocsv"/>
+		<logger level="INFO" doc:name="Logger" doc:id="28bcb249-f279-4d1e-af1c-51069cd906f8" message="flow has started here:#[payload]"/>
+		<ee:transform doc:name="Transform Message" doc:id="c8f0c12d-0102-4ee2-9597-c8257a38c1ba" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/csv headerLineNumber = 0 , header = true
+---
+payload.Employees map ( employee , indexOfEmployee ) -> {
+	userid: employee.userId,
+	jobtitle: employee.jobTitleName,
+	firstname: employee.firstName,
+	lastname: employee.lastName,
+	empcode: employee.employeeCode,
+	region: (employee.regiondefault "") ++ employee.region
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<file:write doc:name="Write" doc:id="b8641810-da84-49cc-998c-d8d89d5e3fe4" config-ref="File_Config" path="empdetails.csv"/>
+	</flow>
+</mule>
